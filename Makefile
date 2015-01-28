@@ -3,3 +3,6 @@ run:
 
 doc:
 	phpdoc -d ./src -t ./docs/api --template="responsive-twig"
+
+test:
+	## TODO testing
