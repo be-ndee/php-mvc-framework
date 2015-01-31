@@ -61,12 +61,7 @@ class App {
      */
     public function go () {
         $action = $this->getRouter()->getActionForURL($_SERVER['REQUEST_URI']);
-        // TODO throw exception if action does not exist
-        try {
-            echo $this->doAction($action, null);
-        } catch (Exception $ex) {
-            echo $ex->getMessage();
-        }
+        echo $this->doAction($action, null);
     }
 
     /**
