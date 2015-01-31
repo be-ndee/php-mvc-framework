@@ -8,6 +8,10 @@ use Core\ErrorHandling\Exception;
  * @author Andreas Bissinger <mail@bissinger-andreas.de>
  */
 class ActionNotExistException extends Exception {
+    /**
+     * Create the exception with a message.
+     * @return ActionNotExistException
+     */
     public function __construct () {
         parent::__construct('Action does not exist.');
     }

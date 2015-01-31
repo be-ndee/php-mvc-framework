@@ -8,7 +8,12 @@ use Core\ErrorHandling\Exception;
  * @author Andreas Bissinger <mail@bissinger-andreas.de>
  */
 class InvalidViewException extends Exception {
-    public function __construct ($view) {
-        parent::__construct('The given view does not exist or is invalid. View "' . $view . '".');
+    /**
+     * Create the exception with a message and the given view name.
+     * @param string $viewName The name of the view which causes problems.
+     * @return InvalidViewException
+     */
+    public function __construct ($viewName) {
+        parent::__construct('The given view does not exist or is invalid. View "' . $viewName . '".');
     }
 }

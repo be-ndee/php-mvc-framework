@@ -138,6 +138,10 @@ class App {
         return in_array($module, $this->getModules());
     }
 
+    /**
+     * Build the path with the given parts.
+     * @return string
+     */
     private function buildPath ($parts) {
         return implode(DIRECTORY_SEPARATOR, $parts);
     }
