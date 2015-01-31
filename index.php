@@ -7,7 +7,7 @@ use Core\ErrorHandling\Exception;
 
 try {
     $app = new App('config-sample.php');
-    $app->go();
+    echo $app->go();
 } catch (Exception $exception) {
     echo $exception->getMessage();
 }

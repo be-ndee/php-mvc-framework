@@ -61,7 +61,12 @@ class App {
      */
     public function go () {
         $action = $this->getRouter()->getActionForURL($_SERVER['REQUEST_URI']);
-        echo $this->doAction($action, null);
+        $view = $this->doAction($action, null);
+        $path = $this->buildPath(array(
+            'src', 'Modules', $action->getModuleName(), 'Views', $view->getName()
+        ));
+        $path .= '.tpl.php';
+        return $view->render($path);
     }
 
     /**
@@ -131,5 +136,9 @@ class App {
      */
     public function moduleIsActive ($module) {
         return in_array($module, $this->getModules());
+    }
+
+    private function buildPath ($parts) {
+        return implode(DIRECTORY_SEPARATOR, $parts);
     }
 }

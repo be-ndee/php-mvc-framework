@@ -1,49 +1,49 @@
 <?php
 
 namespace Core\Module;
-use Core\ErrorHandling\InvalidTemplateException;
+use Core\ErrorHandling\InvalidViewException;
 
 /**
- * This class is used for the views. It handles merging templates with parameters.
+ * This class is used for the views. It handles merging s with parameters.
  * @author Andreas Bissinger <mail@bissinger-andreas.de>
  */
 class View {
     /**
-     * @var string The template name of this view.
+     * @var string The name of this view.
      */
-    private $template;
+    private $name;
 
     /**
-     * @var array Parameters which will be passed to and used in the template.
+     * @var array Parameters which will be passed to and used in the view.
      */
     private $parameters;
 
     /**
-     * Constructor for AbstractView. Sets template and parameters
-     * @param string $template   The name for the template.
-     * @param array  $parameters Parameters for the template.
+     * Constructor for AbstractView. Sets  and parameters
+     * @param string $name The name for the .
+     * @param array  $parameters   Parameters for the .
      * @return AbstractView
      */
-    public function __construct ($template, $parameters) {
-        $this->setTemplate($template);
+    public function __construct ($name, $parameters) {
+        $this->setName($name);
         $this->setParameters($parameters);
     }
 
     /**
-     * Get the template.
+     * Get the  name.
      * @return string
      */
-    public function getTemplate () {
-        return $this->template;
+    public function getName () {
+        return $this->name;
     }
 
     /**
-     * Set new template value for the view.
-     * @param string $template The new template.
+     * Set new  name for the view.
+     * @param string $name The new .
      * @return array
      */
-    public function setTemplate ($template) {
-        $this->template = $template;
+    public function setName ($name) {
+        $this->name = $name;
     }
 
     /**
@@ -64,17 +64,18 @@ class View {
     }
 
     /**
-     * Render the template, merge it with the parameters and return the content.
-     * @throws InvalidTemplateException The template does not exist or is invalid.
+     * Render the , merge it with the parameters and return the content.
+     * @param string $path The absolute path to this view.
+     * @throws InvalidViewException The  does not exist or is invalid.
      * @return string
      */
-    public function render () {
-        if (!file_exists($this->getTemplate())) {
-            throw new InvalidTemplateException($this->getTemplate());
+    public function render ($path) {
+        if (!file_exists($path)) {
+            throw new InvalidViewException($this->getName());
         }
         $matches = array();
         ob_start();
-        include $this->getTemplate();
+        include $path;
         $content = ob_get_clean();
         foreach ($this->getParameters() as $key => $value) {
             $content = str_replace('{{$' . $key . '}}', $value, $content);
