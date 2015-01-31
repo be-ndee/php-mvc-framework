@@ -15,7 +15,7 @@ class Router {
      * All registered routes are saved here.
      * @var array
      */
-    private $routes;
+    private $routes = array();
 
     /**
      * Constructor with config file for routes.
