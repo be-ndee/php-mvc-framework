@@ -1,6 +1,7 @@
 <?php
 
 namespace Core\Routing;
+use Core\ErrorHandling\ActionNotExistException;
 
 /**
  * The router is responsible for parsing the url, fetch controller, action and more from it.
@@ -17,6 +18,17 @@ class Router {
     private $routes;
 
     /**
+     * Constructor with config file for routes.
+     * @param array $routes An array with routes as keys and their Actions as the values.
+     * @return Router
+     */
+    public function __construct ($routes = array()) {
+        foreach ($routes as $route => $action) {
+            $this->registerAction($route, $action);
+        }
+    }
+
+    /**
      * Get all registered routes.
      * @return array
      */
@@ -28,21 +40,26 @@ class Router {
      * Register an action with it's controller and url.
      * @param string $url    The url which should call the action.
      * @param Action $action The action which should be called.
+     * @throws ActionNotExistException The given action does exist.
      * @return void
      */
-    public function registerAction ($url, $action) {
+    private function registerAction ($url, $action) {
+        if (!$action->exists()) {
+            throw new ActionNotExistException();
+        }
         $this->routes[$url] = $action;
     }
 
     /**
      * Get the action for the given url.
      * @param string $url The url which should call the action.
+     * @throws ActionNotExistException The given action does exist.
      * @return Action
      */
     public function getActionForURL ($url) {
         if (array_key_exists($url, $this->routes)) {
             return $this->routes[$url];
         }
-        return null;
+        throw new ActionNotExistException;
     }
 }
