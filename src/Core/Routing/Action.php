@@ -34,6 +34,7 @@ class Action {
      * @return Action
      */
     public function __construct ($moduleName, $controllerName, $actionName) {
+        $this->setModuleName($moduleName);
         $this->setControllerName($controllerName);
         $this->setActionName($actionName);
     }
@@ -89,21 +90,38 @@ class Action {
         $this->moduleName = $moduleName;
     }
 
-    public function getCompleteNamespace () {
-        return 'Modules\\' . $this->getModuleName() . '\\' . $this->getControllerName();
+    /**
+     * Get the full name with with namespaces.
+     * @return string
+     */
+    public function getFullName () {
+        return 'Modules\\' . $this->getModuleName() . '\\Controller\\' . $this->getControllerName();
     }
 
     /**
      * Does the controller with its action exist?
      * @return boolean
      */
-    public function actionExists () {
-        if (class_exists($this->getControllerName())) {
-            $controller = $this->getCompleteNamespace();
-            if (method_exists(new $controller(), $this->getActionName())) {
+    public function exists () {
+        if (class_exists($this->getFullName())) {
+            $controller = $this->getFullName();
+            if (method_exists(new $controller(null), $this->getActionName())) {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Create an instance of the controller of this action.
+     * @param Request $request The request which causes this action.
+     * @return Core\Module\AbstractController|NULL
+     */
+    public function getControllerObject ($request) {
+        if (!$this->exists()) {
+            return null;
+        }
+        $completeName = $this->getFullName();
+        return new $completeName($request);
     }
 }
