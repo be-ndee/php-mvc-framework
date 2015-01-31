@@ -3,6 +3,9 @@
 namespace Core\Application;
 use Core\Routing\Request;
 use Core\Routing\Action;
+use Core\Routing\Router;
+use Core\ErrorHandling\ActionNotExistException;
+use Core\ErrorHandling\ConfigFileException;
 
 /**
  * This class represents the whole application. It manages all request and calls the responsible routers.
@@ -10,16 +13,83 @@ use Core\Routing\Action;
  */
 class App {
     /**
+     * @var Router The router which handles all actions
+     */
+    private $router;
+
+    /**
+     * The constructor of App. It creates the important instances to run the application.
+     * @param string $configFile The name of the config file.
+     * @throws ConfigFileException The config file is invalid or does not exist.
+     * @return App
+     */
+    public function __construct ($configFile) {
+        if (!file_exists($configFile)) {
+            throw new ConfigFileException($configFile);
+        }
+        $config = include $configFile;
+        $actions = array();
+        if (!array_key_exists('routes', $config)) {
+            throw new ConfigFileException();
+        }
+        foreach ($config['routes'] as $route => $actionConfig) {
+            if (!array_key_exists('module', $actionConfig) ||
+                !array_key_exists('controller', $actionConfig) ||
+                !array_key_exists('action', $actionConfig)) {
+                throw new ConfigFileException($configFile);
+                
+            }
+            $action = new Action($actionConfig['module'], $actionConfig['controller'], $actionConfig['action']);
+            $actions[$route] = $action;
+        }
+        $this->setRouter(new Router($actions));
+    }
+
+    /**
+     * This starts and runs the application. It handles the current request.
+     * @return void
+     */
+    public function go () {
+        $action = $this->getRouter()->getActionForURL($_SERVER['REQUEST_URI']);
+        // TODO throw exception if action does not exist
+        try {
+            echo $this->doAction($action, null);
+        } catch (Exception $ex) {
+            echo $ex->getMessage();
+        }
+    }
+
+    /**
      * Do the given action and handle its return value.
      * @param Action  $action  The action which should be called.
      * @param Request $request The request which came in.
+     * @throws ActionNotExistException The given action does exist.
      * @return void
      */
     public function doAction ($action, $request) {
         if ($action->exists()) {
             $object = $action->getControllerObject($request);
             $action = $action->getActionName();
-            $object->$action();
+            return $object->$action();
+        } else {
+            throw new ActionNotExistException();
         }
+    }
+
+    /**
+     * Return the router of the application.
+     * @return Router
+     */
+    public function getRouter () {
+        return $this->router;
+    }
+
+    /**
+     * Set the router of the application.
+     * @param Router $router The new router.
+     * @return void
+     */
+    private function setRouter ($router) {
+        $this->router = $router;
     }
 }
