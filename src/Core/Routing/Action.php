@@ -9,20 +9,17 @@ use Core\Application\Config;
  */
 class Action {
     /**
-     * The name of this action.
-     * @var string
+     * @var string The name of this action.
      */
     private $actionName;
 
     /**
-     * The name of the controller which contains this action.
-     * @var string
+     * @var string The name of the controller which contains this action.
      */
     private $controllerName;
 
     /**
-     * The name of the module which contains this controller.
-     * @var string
+     * @var string The name of the module which contains this controller.
      */
     private $moduleName;
 

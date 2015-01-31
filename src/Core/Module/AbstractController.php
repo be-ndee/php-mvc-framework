@@ -9,8 +9,7 @@ use Core\Routing\Request;
  */
 class AbstractController {
     /**
-     * The request of this controller
-     * @var Request
+     * @var Request The request of this controller
      */
     private $request;
 

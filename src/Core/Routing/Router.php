@@ -12,8 +12,7 @@ class Router {
     const URL_PARAM_INT = 'int';
 
     /**
-     * All registered routes are saved here.
-     * @var array
+     * @var array All registered routes are saved here.
      */
     private $routes = array();
 
