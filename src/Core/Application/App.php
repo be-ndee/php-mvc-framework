@@ -16,7 +16,7 @@ class App {
      * @return void
      */
     public function doAction ($action, $request) {
-        if ($action->actionExists()) {
+        if ($action->exists()) {
             $object = $action->getControllerObject($request);
             $action = $action->getActionName();
             $object->$action();
