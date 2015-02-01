@@ -60,8 +60,15 @@ class App {
      * @return void
      */
     public function go () {
-        $action = $this->getRouter()->getActionForURL($_SERVER['REQUEST_URI']);
-        $view = $this->doAction($action, null);
+        $action = $this->getRouter()->getActionForURL($_SERVER['PATH_INFO']);
+        $type = Request::TYPE_GET;
+        $parameters = $_GET;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $type = Request::TYPE_POST;
+            $parameters = $_POST;
+        }
+        $request = new Request($type, $parameters, array());
+        $view = $this->doAction($action, $request);
         $path = $this->buildPath(array(
             'src', 'Modules', $action->getModuleName(), 'Views', $view->getName()
         ));
