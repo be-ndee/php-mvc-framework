@@ -74,12 +74,12 @@ class View {
             throw new InvalidViewException($this->getName());
         }
         $matches = array();
+        foreach ($this->getParameters() as $key => $value) {
+            ${$key} = $value;
+        }
         ob_start();
         include $path;
         $content = ob_get_clean();
-        foreach ($this->getParameters() as $key => $value) {
-            $content = str_replace('{{$' . $key . '}}', $value, $content);
-        }
         return $content;
     }
 }
