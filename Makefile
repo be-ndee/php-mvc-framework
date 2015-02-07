@@ -5,4 +5,4 @@ doc:
 	phpdoc -d ./src -t ./docs/api --template="responsive"
 
 test:
-	## TODO testing
+	phpunit --bootstrap bootstrap.php --log-json tests/log.json tests/*.php
