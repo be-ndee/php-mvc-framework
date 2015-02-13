@@ -4,3 +4,6 @@
 
 # generated files
 docs
+
+# tests
+tests/test_log.json

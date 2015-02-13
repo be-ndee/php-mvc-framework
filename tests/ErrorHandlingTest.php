@@ -9,7 +9,7 @@ use Core\ErrorHandling\InvalidViewException;
  * This class tests all error handling things.
  * @author Andreas Bissinger <mail@bissinger-andreas.de>
  */
-class ErrorHandling extends PHPUnit_Framework_TestCase {
+class ErrorHandlingTest extends PHPUnit_Framework_TestCase {
     /**
      * @expectedException        Core\ErrorHandling\Exception
      */
